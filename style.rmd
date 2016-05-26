@@ -1,7 +1,7 @@
 ---
 title: Style guide
 layout: default
-output: bookdown::html_chapter
+output: oldbookdown::html_chapter
 ---
 
 # Style guide {#style}
@@ -12,15 +12,15 @@ Good style is important because while your code only has one author, it'll usual
 
 The formatR package, by Yihui Xie, makes it easier to clean up poorly formatted code. It can't do everything, but it can quickly get your code from terrible to pretty good. Make sure to read [the notes on the wiki](https://github.com/yihui/formatR/wiki) before using it.
 
-## Notation and naming
+## Notation and naming {#style-notnam}
 
 ### File names
 
 File names should be meaningful and end in `.R`.
 
     # Good
-    fit-models.R
-    utility-functions.R
+    fit_models.R
+    utility_functions.R
 
     # Bad
     foo.r
@@ -28,9 +28,11 @@ File names should be meaningful and end in `.R`.
 
 If files need to be run in sequence, prefix them with numbers:
 
-    0-download.R
-    1-parse.R
-    2-explore.R
+    0_download.R
+    1_parse.R
+    2_explore.R
+
+Pay attention to capitalization, since you, or some of your collaborators, might be using an operating system with a case-insensitive file system (e.g., Microsoft Windows or OS X) which can lead to problems with (case-sensitive) revision control systems. Never use filenames that differ only in capitalisation.
 
 ### Object names
 
@@ -40,6 +42,8 @@ If files need to be run in sequence, prefix them with numbers:
 > --- Phil Karlton
 
 Variable and function names should be lowercase. Use an underscore (`_`) to separate words within a name. Generally, variable names should be nouns and function names should be verbs. Strive for names that are concise and meaningful (this is not easy!).
+
+Although standard R uses dots extensively in function names (`contrib.url()`), methods (`all.equal`), or class names (`data.frame`), it's better to use underscores. For example, the basic S3 scheme to define a method for a class, using a generic function, would be to concatenate them with a dot, like this `generic.class`. This can lead to confusing methods like `as.data.frame.data.frame()` whereas something like `print.my_class()` is unambiguous.
 
 ```{r, eval = FALSE}
 # Good
@@ -62,7 +66,7 @@ c <- 10
 mean <- function(x) sum(x)
 ```
 
-## Syntax
+## Syntax {#style-syn}
 
 ### Spacing
 
@@ -189,7 +193,14 @@ x <- 5
 x = 5
 ```
 
-## Organisation
+## Functions {#style-fun}
+
+* Should be verbs, where possible.
+* Only use `return()` for early returns. 
+* Strive to keep blocks within a function on one screen, so around 
+  20-30 lines maximum.
+
+## Organisation {#style-org}
 
 ### Commenting guidelines
 

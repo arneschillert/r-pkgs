@@ -1,80 +1,56 @@
 ---
 layout: default
 title: Other components
-output: bookdown::html_chapter
+output: oldbookdown::html_chapter
 ---
 
-# Other components
+# Other components {#misc}
 
-* `.Rbuildignore`
+There are four other directories that are valid top-level directories. They are rarely used:
 
-* `inst/`
+* `demo/`: for package demos. These were useful prior to the introduction
+  of vignettes, but are no longer recommended. See below.
 
-* `exec/`: executable scripts
-* `po/`: translation files
+* `exec/`: for executable scripts. Unlike files placed in other directories, files in 
+  `exec/` are automatically flagged as executable.
 
-* the `inst/CITATION` file describes how to cite your package. If you have
-  published a peer reviewed article which you'd like people to cite when they
-  use your software, this is the place to put it.
+* `po/`: translations for messages. This is useful but beyond the scope of this 
+  book. See the [Internationalization][internationalization] chapter of 
+  "R extensions" for more details.
 
-* the `demo/` directory contains larger scale demos, that use many 
-  features of the package.
+* `tools/`: auxiliary files needed during configuration, or for sources that need
+  to generate scripts.
+
+## Demos {#demo}
+
+A demo is an `.R` file that lives in `demo/`. Demos are like examples but tend to be longer. Instead of focussing on a single function, they show how to weave together multiple functions to solve a problem.
+
+You list and access demos with `demo()`:
+
+* Show all available demos: `demo()`.
+* Show all demos in a package: `demo(package = "httr")`.
+* Run a specific demo: `demo("oauth1-twitter", package = "httr")`.
+* Find a demo: `system.file("demo", "oauth1-twitter.R", package = "httr")`.
+
+Each demo must be listed in `demo/00Index` in the following form: `demo-name  Demo description`. The demo name is the name of the file without the extension, e.g. `demo/my-demo.R` becomes `my-demo`.
+
+By default the demo asks for human input for each plot: "Hit <Return> to see next plot: ". 
+This behaviour can be overridden by adding `devAskNewPage(ask = FALSE)` to the demo file.
+You can add pauses by adding: `readline("press any key to continue")`.
+
+Generally, I do not recommend using demos. Instead, consider writing a vignette:
+
+* Demos are not automatically tested by `R CMD check`. This means that they can 
+  easily break without your knowledge.
+
+* Vignettes have both input and output, so readers can see the results 
+  without having to run the code themselves.
+
+* Longer demos need to mingle code with explanation, and RMarkdown is better
+  suited to that task than R comments.
+
+* Vignettes are listed on the CRAN package page. This makes it easier for 
+  new users to discover them.
 
 
-## `CITATION`
-
-The `CITATION` file lives in the `inst` directory and is intimately connected to the `citation()` function which tells you how to cite R and R packages.  Calling `citation()` without any arguments tells you how to cite base R:
-
-    To cite R in publications use:
-
-      R Core Team (2012). R: A language and environment for statistical
-      computing. R Foundation for Statistical Computing, Vienna, Austria.
-      ISBN 3-900051-07-0, URL http://www.R-project.org/.
-
-    A BibTeX entry for LaTeX users is
-
-      @Manual{,
-        title = {R: A Language and Environment for Statistical Computing},
-        author = {{R Core Team}},
-        organization = {R Foundation for Statistical Computing},
-        address = {Vienna, Austria},
-        year = {2012},
-        note = { {ISBN} 3-900051-07-0},
-        url = {http://www.R-project.org/},
-      }
-
-    We have invested a lot of time and effort in creating R, please cite it
-    when using it for data analysis. See also ‘citation("pkgname")’ for
-    citing R packages.
-
-This is generated from a `CITATION` file that looks like this:
-
-    bibentry("Manual",
-       title = "R: A Language and Environment for Statistical Computing",
-       author = person("R Core Team"),
-       organization = "R Foundation for Statistical Computing",
-       address      = "Vienna, Austria",
-       year   = version$year,
-       note   = "{ISBN} 3-900051-07-0",
-       url    = "http://www.R-project.org/",
-  
-       mheader = "To cite R in publications use:",
-
-       mfooter = 
-         paste("We have invested a lot of time and effort in creating R,",
-          "please cite it when using it for data analysis.",
-          "See also", sQuote("citation(\"pkgname\")"),
-          "for citing R packages.", sep = " ")
-    )
-
-As you can see, it's pretty simple: you only need to learn one new function, `bibentry()`. The most important arguments, are `bibtype` (the first argument, which can "Article", "Book", "PhDThesis" and so on), and then the standard bibliographic information like `title,`, `author`, `year`, `publisher`, `journal`, `volume`, `issue`, `pages` and so on (they are all described in detail in `?bibEntry`). The header (`mheader`) and footer (`mfooter`) are optional, and are useful places for additional exhortations.
-
-## Demos
-
-A demo is very much like a function example, but is longer, and shows how to use multiple functions together. Demos are `.R` files that live in the `demo/` package directory, and are accessed with the `demo()` function.
-
-(NOT YET IMPLEMENTED) The `demos` directory also needs an index. The easiest way to generate that index is to add a roxygen comment with `@demoTitle` tag:
-
-    #' @demoTitle my title
-
-The roxygen process that turns this comment into an index is described in the next chapter.
+[internationalization]:http://cran.rstudio.com/doc/manuals/r-devel/R-exts.html#Internationalization
